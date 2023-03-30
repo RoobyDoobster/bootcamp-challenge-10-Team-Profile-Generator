@@ -1,4 +1,4 @@
-function generateMarkdown() {
+function generateHTML(teamCards) {
     return `
     <!DOCTYPE html>
 <html lang="en">
@@ -24,4 +24,4 @@ function generateMarkdown() {
 </html>`
 }
 
-module.exports = generateMarkdown;
+module.exports = generateHTML;

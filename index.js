@@ -5,7 +5,7 @@ const jest = require('jest');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
-const generateMarkdown = require('./utils/generateMarkdown');
+const generateHTML = require('./utils/generateHTML');
 const generateCards = require('./utils/generateCards');
 
 let teamMembers = [];
@@ -68,12 +68,12 @@ function createEmployee() {
         : value.role == 'Manager' ? teamMembers.push(new Manager(value.name, value.id, value.email, value.officeNum))
         : console.log("Error", value.role);
 
-        value.newEmployee ? createEmployee() : generateHTML();
+        value.newEmployee ? createEmployee() : createHTML();
     })
 }
 
-function generateHTML() {
-    let teamCards = ``;
+function createHTML() {
+    let teamCards = ` `;
     for (teamMember of teamMembers) {
         teamCards += generateCards(teamMember);
     }
@@ -87,4 +87,25 @@ function writeHtmlFile(htmlData) {
     );
 }
 
-createEmployee();
+function init() {
+    inquirer
+    .prompt([
+        ...questions,
+        {
+            type: 'input',
+            message: `Enter the Team Manger's office number`,
+            name: 'office'
+        },
+        {
+            type: 'confirm',
+            message: `Would you like to add another employee?`,
+            name: 'newEmployee'
+        },
+    ])
+    .then((value) => {
+        teamMembers.push(new Manager(...Object.values(value)));
+        value.newEmployee ? createEmployee() : createHTML();
+    })
+}
+
+init();
